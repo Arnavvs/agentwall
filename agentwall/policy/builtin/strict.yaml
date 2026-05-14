@@ -1,0 +1,69 @@
+apiVersion: agentwall.dev/v1
+kind: AgentPolicy
+metadata:
+  name: strict
+  description: "Default strict policy — blocks everything suspicious"
+
+spec:
+  agents:
+    "*":
+      vectors:
+        prompt_injection:
+          enabled: true
+          action: BLOCK
+          classifiers: [prompt_shield, rule_engine, language_intent]
+          score_threshold: 0.6
+        indirect_injection:
+          enabled: true
+          action: BLOCK
+          classifiers: [prompt_shield_documents, rule_engine]
+        obfuscation:
+          enabled: true
+          action: SANITIZE
+          decoders: [base64, rot13, hex, unicode_normalize]
+        jailbreak:
+          enabled: true
+          action: BLOCK
+          score_threshold: 0.5
+        prompt_leaking:
+          enabled: true
+          action: BLOCK
+          detection_modes: [inbound_intent, outbound_overlap]
+        mcp_poisoning:
+          enabled: true
+          action: BLOCK
+          scan_tools_list: true
+          scan_tool_responses: true
+          forbidden_keys: ["SYSTEM NOTE", "CRITICAL OVERRIDE", "_system", "__instructions__"]
+          forbidden_patterns: ["<IMPORTANT>", "<SYSTEM>", "do not mention"]
+        tool_scope:
+          enabled: true
+          action: BLOCK
+          mode: allowlist
+          tools: []
+      output_validation:
+        enabled: true
+        action: REDACT
+        detectors:
+          system_prompt_leak:
+            enabled: true
+            similarity_threshold: 80
+          secret_scanner:
+            enabled: true
+            patterns: [all]
+            entropy_check: true
+            entropy_threshold: 4.5
+          pii:
+            enabled: true
+            categories: [Email, PhoneNumber, USSocialSecurityNumber, CreditCardNumber, IPAddress]
+            confidence_threshold: 0.85
+      escalation:
+        sentinel_min_severity: HIGH
+        alert_threshold:
+          count: 3
+          window_seconds: 60
+      audit:
+        log_all_events: true
+        log_payloads: false
+        retention_days: 30
+  agent_overrides: {}

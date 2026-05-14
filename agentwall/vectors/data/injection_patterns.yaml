@@ -1,0 +1,80 @@
+vectors:
+  prompt_injection:
+    - id: ignore_previous
+      pattern: '(?i)ignore\s+(all\s+)?previous\s+(instructions|prompts|rules|directives)'
+      plaintext: "ignore previous instructions"
+      weight: 0.40
+      fuzzy_threshold: 85
+      severity_hint: HIGH
+
+    - id: disregard_above
+      pattern: '(?i)disregard\s+(everything\s+)?(above|prior)'
+      plaintext: "disregard above"
+      weight: 0.40
+      fuzzy_threshold: 85
+      severity_hint: HIGH
+
+    - id: new_system_prompt
+      pattern: '(?i)(your|the)\s+new\s+(system\s+)?(prompt|instructions?)\s+(is|are)'
+      plaintext: "your new system prompt is"
+      weight: 0.40
+      fuzzy_threshold: 85
+      severity_hint: HIGH
+
+    - id: pretend_no_filters
+      pattern: '(?i)pretend\s+(you\s+have\s+)?no\s+(filters?|restrictions?|rules?)'
+      plaintext: "pretend you have no filters"
+      weight: 0.40
+      fuzzy_threshold: 85
+      severity_hint: HIGH
+
+    - id: override_instructions
+      pattern: '(?i)override\s+(all\s+)?(previous\s+)?instructions'
+      plaintext: "override previous instructions"
+      weight: 0.40
+      fuzzy_threshold: 85
+      severity_hint: HIGH
+
+  prompt_leaking:
+    - id: reveal_system_prompt
+      pattern: '(?i)(reveal|show|print|repeat|display)\s+(your|the)\s+(system\s+)?(prompt|instructions?|rules)'
+      plaintext: "reveal your system prompt"
+      weight: 0.50
+      fuzzy_threshold: 80
+      severity_hint: CRITICAL
+
+    - id: above_in_quotes
+      pattern: '(?i)(repeat|output)\s+(everything\s+)?above\s+(in\s+)?(quotes?|verbatim)'
+      plaintext: "repeat everything above in quotes"
+      weight: 0.45
+      fuzzy_threshold: 80
+      severity_hint: HIGH
+
+  jailbreak:
+    - id: dan
+      pattern: '(?i)\b(DAN|do\s+anything\s+now)\b'
+      plaintext: "DAN do anything now"
+      weight: 0.45
+      fuzzy_threshold: 80
+      severity_hint: HIGH
+
+    - id: developer_mode
+      pattern: '(?i)(enable|activate)\s+developer\s+mode'
+      plaintext: "enable developer mode"
+      weight: 0.45
+      fuzzy_threshold: 80
+      severity_hint: HIGH
+
+    - id: roleplay_unrestricted
+      pattern: '(?i)(roleplay|pretend|act)\s+(as|like)\s+(an?\s+)?(unrestricted|uncensored|jailbroken)'
+      plaintext: "roleplay as unrestricted"
+      weight: 0.40
+      fuzzy_threshold: 80
+      severity_hint: HIGH
+
+    - id: without_restrictions
+      pattern: '(?i)without\s+(any\s+)?(restrictions?|limits?|filters?|guardrails?)'
+      plaintext: "without any restrictions"
+      weight: 0.35
+      fuzzy_threshold: 80
+      severity_hint: HIGH

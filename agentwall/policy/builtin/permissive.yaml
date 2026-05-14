@@ -1,0 +1,69 @@
+apiVersion: agentwall.dev/v1
+kind: AgentPolicy
+metadata:
+  name: permissive
+  description: "Permissive policy — log everything, block only CRITICAL"
+
+spec:
+  agents:
+    "*":
+      vectors:
+        prompt_injection:
+          enabled: true
+          action: BLOCK
+          classifiers: [prompt_shield]
+          score_threshold: 0.85
+        indirect_injection:
+          enabled: true
+          action: BLOCK
+          classifiers: [prompt_shield_documents]
+        obfuscation:
+          enabled: true
+          action: SANITIZE
+          decoders: [base64, rot13, hex, unicode_normalize]
+        jailbreak:
+          enabled: true
+          action: BLOCK
+          score_threshold: 0.85
+        prompt_leaking:
+          enabled: true
+          action: REDACT
+          detection_modes: [outbound_overlap]
+        mcp_poisoning:
+          enabled: true
+          action: BLOCK
+          scan_tools_list: true
+          scan_tool_responses: true
+          forbidden_keys: ["SYSTEM NOTE"]
+          forbidden_patterns: ["<IMPORTANT>"]
+        tool_scope:
+          enabled: false
+          action: ALLOW
+          mode: allowlist
+          tools: []
+      output_validation:
+        enabled: true
+        action: REDACT
+        detectors:
+          system_prompt_leak:
+            enabled: true
+            similarity_threshold: 90
+          secret_scanner:
+            enabled: true
+            patterns: [all]
+            entropy_check: false
+            entropy_threshold: 4.5
+          pii:
+            enabled: true
+            categories: [Email, PhoneNumber, USSocialSecurityNumber]
+            confidence_threshold: 0.9
+      escalation:
+        sentinel_min_severity: CRITICAL
+        alert_threshold:
+          count: 10
+          window_seconds: 300
+      audit:
+        log_all_events: true
+        log_payloads: false
+        retention_days: 7
+  agent_overrides: {}
