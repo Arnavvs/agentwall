@@ -331,24 +331,7 @@ def process_input(user_input: str) -> None:
         response = _llm_respond(user_input, mode="unprotected")
         st.session_state.history_unprotected.append({"role": "agent", "content": response})
 
-    # Panel 2: AGT Only
-    if is_mcp:
-        st.session_state.history_agt.append({"role": "user", "content": "[MCP Poisoning Scenario]"})
-        st.session_state.history_agt.append({"role": "mcp_display"})
-    else:
-        st.session_state.history_agt.append({"role": "user", "content": user_input})
-        agt = AGTEngine()
-        agt_result = agt.check(user_input)
-        if agt_result.blocked:
-            st.session_state.history_agt.append({
-                "role": "blocked",
-                "content": f"Tool call blocked by AGT: {agt_result.reason}",
-            })
-        else:
-            response = _llm_respond(user_input, mode="agt")
-            st.session_state.history_agt.append({"role": "agt_miss", "content": response})
-
-    # Panel 3: AgentWall
+    # Panel 3: AgentWall — run first so we know if it's truly an attack
     aw_result: dict[str, Any] = {}
     if is_mcp:
         st.session_state.history_agentwall.append({"role": "user", "content": "[MCP Poisoning Scenario]"})
@@ -369,6 +352,29 @@ def process_input(user_input: str) -> None:
                 "role": "allowed",
                 "content": "Safe message — passed to agent normally.",
             })
+
+    # Panel 2: AGT Only — use AgentWall verdict to decide if AGT "missed" something
+    is_real_attack = aw_result.get("blocked", False)
+    if is_mcp:
+        st.session_state.history_agt.append({"role": "user", "content": "[MCP Poisoning Scenario]"})
+        st.session_state.history_agt.append({"role": "mcp_display"})
+    else:
+        st.session_state.history_agt.append({"role": "user", "content": user_input})
+        agt = AGTEngine()
+        agt_result = agt.check(user_input)
+        if agt_result.blocked:
+            st.session_state.history_agt.append({
+                "role": "blocked",
+                "content": f"Tool call blocked by AGT: {agt_result.reason}",
+            })
+        elif is_real_attack:
+            # AGT passed an attack — show "ATTACK LANDED"
+            response = _llm_respond(user_input, mode="agt")
+            st.session_state.history_agt.append({"role": "agt_miss", "content": response})
+        else:
+            # Safe message — AGT correctly passes it, show normal response
+            response = _llm_respond(user_input, mode="agt")
+            st.session_state.history_agt.append({"role": "agent", "content": response})
 
     # Scores
     st.session_state.scores["total"] += 1
