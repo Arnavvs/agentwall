@@ -1,0 +1,86 @@
+/* AgentWall Live Demo — Custom Styles */
+
+/* Global page background */
+.stApp {
+    background-color: #0B1120;
+}
+
+/* Panel headers */
+.panel-unprotected {
+    background: #7F1D1D;
+    color: white;
+}
+
+.panel-agt {
+    background: #78350F;
+    color: white;
+}
+
+.panel-agentwall {
+    background: #14532D;
+    color: white;
+}
+
+/* Message bubbles */
+.msg-user {
+    background: #1E3A5F;
+    color: white;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.msg-agent {
+    background: #162033;
+    color: white;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.msg-blocked {
+    background: #450A0A;
+    border-left: 4px solid #EF4444;
+    color: white;
+}
+
+.msg-allowed {
+    background: #052E16;
+    border-left: 4px solid #22C55E;
+    color: white;
+}
+
+.msg-agt-miss {
+    background: #1C1917;
+    border-left: 4px solid #F59E0B;
+    color: white;
+}
+
+/* Scenario buttons */
+.stButton button {
+    font-size: 11px;
+}
+
+/* Score tracker bar */
+.score-bar {
+    background: #1E293B;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin: 8px 0;
+    font-family: monospace;
+    font-size: 13px;
+    color: #E2E8F0;
+}
+
+/* Section headers */
+.section-header {
+    color: #F8FAFC;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+/* Description text */
+.desc-text {
+    color: #94A3B8;
+    font-size: 12px;
+    margin-bottom: 8px;
+}

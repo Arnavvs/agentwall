@@ -78,3 +78,39 @@ vectors:
       weight: 0.35
       fuzzy_threshold: 80
       severity_hint: HIGH
+
+  tool_scope:
+    - id: shell_execution
+      pattern: '(?i)(execute|run|call)\s+(the\s+)?(shell|bash|cmd|command|script)'
+      plaintext: "execute shell command"
+      weight: 1.00
+      fuzzy_threshold: 80
+      severity_hint: CRITICAL
+
+    - id: forbidden_tool_send_email
+      pattern: '(?i)\bsend_?email\b'
+      plaintext: "send_email"
+      weight: 1.00
+      fuzzy_threshold: 90
+      severity_hint: CRITICAL
+
+    - id: forbidden_tool_delete_file
+      pattern: '(?i)\bdelete_?file\b'
+      plaintext: "delete_file"
+      weight: 1.00
+      fuzzy_threshold: 90
+      severity_hint: CRITICAL
+
+    - id: forbidden_tool_execute_code
+      pattern: '(?i)\bexecute_?code\b'
+      plaintext: "execute_code"
+      weight: 1.00
+      fuzzy_threshold: 90
+      severity_hint: CRITICAL
+
+    - id: rm_rf
+      pattern: '(?i)\brm\s+-rf?\b'
+      plaintext: "rm -rf"
+      weight: 1.00
+      fuzzy_threshold: 95
+      severity_hint: CRITICAL
