@@ -7,7 +7,7 @@ name = "agentwall"
 version = "0.1.0"
 description = "Security middleware for AI agents — one line of code"
 readme = "README.md"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [
     { name = "Arnav Vashishtha", email = "arnav.vashishtha@example.com" }

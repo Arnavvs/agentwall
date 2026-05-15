@@ -1,0 +1,7 @@
+streamlit>=1.32
+pydantic>=2.6
+pyyaml>=6.0
+rapidfuzz>=3.6
+regex>=2024.0
+structlog>=24.1
+aiosqlite>=0.20
