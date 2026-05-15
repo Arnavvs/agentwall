@@ -153,7 +153,7 @@ async def scenario_mcp_poisoning() -> None:
     if result.has_findings:
         print(f"  {_c('BLOCKED', RED)} — MCP metadata scanner fired at server connect time")
         print(f"  Severity : {_c('CRITICAL', RED)}")
-        print(f"  Caught by: mcp_scanner.suspicious_pattern")
+        print("  Caught by: mcp_scanner.suspicious_pattern")
         for f in result.findings:
             print(f"    └─ field  : {f.field_path}")
             print(f"       matched : '{f.matched_text}'")
