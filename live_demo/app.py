@@ -259,7 +259,8 @@ def _llm_respond(user_input: str, mode: str) -> str:
             return resp.choices[0].message.content or "(no response)"
 
     except Exception as e:
-        return f"(LLM error — falling back to mock)\n\n{respond(user_input, mode=mode)}"
+        st.sidebar.error(f"LLM error: {e}")
+        return f"⚠ LLM call failed: {e}\n\n---\nMock fallback:\n{respond(user_input, mode=mode)}"
 
     return respond(user_input, mode=mode)
 
